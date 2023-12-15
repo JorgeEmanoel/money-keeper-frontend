@@ -3,7 +3,15 @@ import * as Styled from './styles'
 
 import Saturn from '../../assets/images/saturn.png'
 
+import { Auth } from '../../infra/services/Auth'
+
+import { Formik } from 'formik'
+import { useNavigate } from 'react-router-dom'
+import { Icon } from '../../shared/components/Icon'
+
 export const LoginPage = (): React.ReactElement => {
+  const navigate = useNavigate()
+
   return (
     <Styled.Container>
       <Styled.Image src={Saturn} />
@@ -15,15 +23,42 @@ export const LoginPage = (): React.ReactElement => {
         Welcome. Fill the form bellow to start managing your finances
       </Styled.WelcomeMessage>
 
-      <Styled.FormContainer>
-        <Styled.Label>Username</Styled.Label>
-        <Styled.Input placeholder='john doe' />
-        <Styled.Label>Password:</Styled.Label>
-        <Styled.Input type='password' placeholder='********' />
+      <Formik
+        initialValues={{
+          email: '',
+          password: ''
+        }}
+        onSubmit={async ({ email, password }) => {
+          const { ok, token, message } = await Auth.login(email, password)
 
-        <Styled.SubmitButton type="submit">Login</Styled.SubmitButton>
-        <Styled.RegisterAnchor href="/register">I do not have an account</Styled.RegisterAnchor>
-      </Styled.FormContainer>
+          if (!ok) {
+            // TODO: change to a notify toast
+            alert(message)
+            return
+          }
+
+          Auth.saveToken(token)
+          navigate('/home')
+        }}
+      >
+        {({
+          isSubmitting,
+          handleSubmit
+        }) => (
+          <Styled.FormContainer>
+            <Styled.Label>E-mail:</Styled.Label>
+            <Styled.Input placeholder="john doe" type="email" name="email" required />
+            <Styled.Label>Password:</Styled.Label>
+            <Styled.Input type="password" placeholder="********" name="password" />
+
+            <Styled.SubmitButton type="submit" disabled={isSubmitting}>
+              Login
+              {isSubmitting && <Icon name="spinner" spin />}
+            </Styled.SubmitButton>
+            <Styled.RegisterAnchor href="/register">I do not have an account</Styled.RegisterAnchor>
+          </Styled.FormContainer>
+        )}
+      </Formik>
     </Styled.Container>
   )
 }

@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { Form, Field } from 'formik'
+
 export const Container = styled.div`
   min-width: 100vw;
   min-height: 100vh;
@@ -34,7 +36,7 @@ export const WelcomeMessage = styled.p`
   font-size: 12px;
 `
 
-export const FormContainer = styled.div`
+export const FormContainer = styled(Form)`
   display: flex;
   flex-direction: column;
 `
@@ -47,7 +49,7 @@ export const Label = styled.label`
   font-weight: 600;
 `
 
-export const Input = styled.input`
+export const Input = styled(Field)`
   padding: 10px 15px;
   border-radius: 5px;
   border: 0;

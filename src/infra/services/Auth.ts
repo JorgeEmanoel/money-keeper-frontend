@@ -1,4 +1,4 @@
-import { BaseService } from '../shares/services/BaseService'
+import { BaseService } from '../shared/services/BaseService'
 
 export const LOCAL_STORAGE_TOKEN_KEY = String(process.env.REACT_APP_LOCAL_STORAGE_TOKEN_KEY)
 
