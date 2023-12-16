@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 
-import * as Styled from './styles'
 import { BottomNavigation } from '../../shared/components/BottomNavigation'
 import { Icon } from '../../shared/components/Icon'
+import { AuthPage } from '../../shared/middleware/AuthPage'
+
+import * as Styled from './styles'
 
 type DirectionType = 'income' | 'outcome'
 
-export const TransactionsPage = (): React.ReactElement => {
+const Transactions = (): React.ReactElement => {
   const [direction, setDirection] = useState<DirectionType>('income')
 
   return (
@@ -65,3 +67,5 @@ export const TransactionsPage = (): React.ReactElement => {
     </Styled.MainContainer>
   )
 }
+
+export const TransactionsPage = AuthPage(Transactions)

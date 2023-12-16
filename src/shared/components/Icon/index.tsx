@@ -18,7 +18,7 @@ interface IconProps extends Omit<FontAwesomeIconProps, 'icon'> {
   name: string
 }
 
-export const Icon = ({ name }: IconProps): React.ReactElement => {
+export const Icon = ({ name, spin = false }: IconProps): React.ReactElement => {
   const icon = (): IconDefinition => {
     if (typeof mappedIcons[name] !== 'undefined') {
       return mappedIcons[name]
@@ -28,6 +28,6 @@ export const Icon = ({ name }: IconProps): React.ReactElement => {
   }
 
   return (
-    <FontAwesomeIcon icon={icon()} />
+    <FontAwesomeIcon icon={icon()} spin={spin} />
   )
 }

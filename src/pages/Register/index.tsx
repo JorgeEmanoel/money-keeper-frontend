@@ -6,8 +6,10 @@ import { Auth } from '../../infra/services/Auth'
 
 import { Formik } from 'formik'
 import { useNavigate } from 'react-router-dom'
+import { Icon } from '../../shared/components/Icon'
+import { GuestPage } from '../../shared/middleware/GuestPage'
 
-export const RegisterPage = (): React.ReactElement => {
+const Register = (): React.ReactElement => {
   const navigate = useNavigate()
   const performLogin = async (email: string, password: string): Promise<void> => {
     const { ok, token, message } = await Auth.login(email, password)
@@ -65,9 +67,7 @@ export const RegisterPage = (): React.ReactElement => {
             <Styled.Input type='password' placeholder='********' required name="passwordConfirmation" />
 
             <Styled.SubmitButton type="submit" disabled={isSubmitting}>
-              {
-                isSubmitting ? 'Registering...' : 'Register'
-              }
+              Register {isSubmitting ? <Icon name="spinner" spin /> : ''}
             </Styled.SubmitButton>
             <Styled.RegisterAnchor href="/">I already have an account</Styled.RegisterAnchor>
           </Styled.FormContainer>
@@ -76,3 +76,5 @@ export const RegisterPage = (): React.ReactElement => {
     </Styled.Container>
   )
 }
+
+export const RegisterPage = GuestPage(Register)

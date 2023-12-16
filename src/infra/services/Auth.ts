@@ -58,9 +58,23 @@ export const Auth = {
     }
   }),
   token: (): string => {
-    return String(localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY))
+    const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
+
+    if (token === null) {
+      return ''
+    }
+
+    return token
   },
   saveToken: (token: string): void => {
     localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, token)
+  },
+  authenticated: (): boolean => {
+    const token = Auth.token()
+    console.debug('Token checked: ', { token })
+    return token.length > 0
+  },
+  clear: (): void => {
+    localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
   }
 }

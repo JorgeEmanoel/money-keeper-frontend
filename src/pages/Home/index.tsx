@@ -1,10 +1,11 @@
 import React from 'react'
 
 import { BottomNavigation } from '../../shared/components/BottomNavigation'
+import { AuthPage } from '../../shared/middleware/AuthPage'
 
 import * as Styled from './styles'
 
-export const HomePage = (): React.ReactElement => {
+const Home = (): React.ReactElement => {
   return (
     <Styled.MainContainer>
       <BottomNavigation current="home" />
@@ -79,3 +80,5 @@ export const HomePage = (): React.ReactElement => {
     </Styled.MainContainer>
   )
 }
+
+export const HomePage = AuthPage(Home)

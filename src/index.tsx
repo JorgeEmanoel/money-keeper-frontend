@@ -18,6 +18,7 @@ import { RegisterPage } from './pages/Register'
 import 'react-toastify/dist/ReactToastify.css'
 import { HomePage } from './pages/Home'
 import { TransactionsPage } from './pages/Transactions'
+import { ProfilePage } from './pages/Profile'
 
 // TODO: separate
 const router = createBrowserRouter([
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: '/transactions',
     element: <TransactionsPage />
+  },
+  {
+    path: '/profile',
+    element: <ProfilePage />
   }
 ])
 

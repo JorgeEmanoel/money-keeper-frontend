@@ -8,8 +8,9 @@ import { Auth } from '../../infra/services/Auth'
 import { Formik } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '../../shared/components/Icon'
+import { GuestPage } from '../../shared/middleware/GuestPage'
 
-export const LoginPage = (): React.ReactElement => {
+const Login = (): React.ReactElement => {
   const navigate = useNavigate()
 
   return (
@@ -62,3 +63,5 @@ export const LoginPage = (): React.ReactElement => {
     </Styled.Container>
   )
 }
+
+export const LoginPage = GuestPage(Login)

@@ -5,7 +5,6 @@ import { Form, Field } from 'formik'
 export const Container = styled.div`
   align-items: center;
   background: linear-gradient(194deg, rgba(2,0,36,1) 0%, rgba(28,28,133,1) 35%, rgba(24,79,150,1) 44%, rgba(171,0,255,1) 100%);
-  background: rgb(2,0,36);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,6 +38,7 @@ export const WelcomeMessage = styled.p`
 export const FormContainer = styled(Form)`
   display: flex;
   flex-direction: column;
+  position: relative;
 `
 
 export const Label = styled.label`
@@ -66,7 +66,7 @@ export const SubmitButton = styled.button`
   cursor: pointer;
   font-weight: bold;
   margin-top: 30px;
-  padding: 8px 16px;
+  padding: 16px 24px;
   transition: all .3s;
 
   &:hover {
