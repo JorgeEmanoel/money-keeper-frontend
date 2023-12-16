@@ -2,12 +2,16 @@
 import React from 'react'
 
 import { FontAwesomeIcon, type FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
-import { type IconDefinition, faSpinner, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { type IconDefinition, faSpinner, faMinus, faBars, faHome, faUser, faCaretDown } from '@fortawesome/free-solid-svg-icons'
 
 type MappedIconsType = Record<string, IconDefinition>
 
 const mappedIcons: MappedIconsType = {
-  spinner: faSpinner
+  spinner: faSpinner,
+  user: faUser,
+  home: faHome,
+  bars: faBars,
+  caretDown: faCaretDown
 }
 
 interface IconProps extends Omit<FontAwesomeIconProps, 'icon'> {

@@ -3,15 +3,15 @@ import styled from 'styled-components'
 import { Form, Field } from 'formik'
 
 export const Container = styled.div`
-  min-width: 100vw;
-  min-height: 100vh;
-  margin: 0;
-  background: rgb(2,0,36);
+  align-items: center;
   background: linear-gradient(194deg, rgba(2,0,36,1) 0%, rgba(28,28,133,1) 35%, rgba(24,79,150,1) 44%, rgba(171,0,255,1) 100%);
+  background: rgb(2,0,36);
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  margin: 0;
+  min-height: 100vh;
+  min-width: 100vw;
 `
 
 export const Image = styled.img`
@@ -20,20 +20,20 @@ export const Image = styled.img`
 `
 
 export const MainTitle = styled.h2`
-  margin: 0;
-  padding: 10px;
-  max-width: 100px;
-  font-weight: bold;
   color: white;
+  font-weight: bold;
+  margin: 0;
+  max-width: 100px;
+  padding: 8px;
 `
 
 export const WelcomeMessage = styled.p`
-  margin: 0;
-  padding: 10px;
-  max-width: 300px;
-  text-align: center;
   color: white;
   font-size: 12px;
+  margin: 0;
+  max-width: 300px;
+  padding: 8px;
+  text-align: center;
 `
 
 export const FormContainer = styled(Form)`
@@ -42,31 +42,31 @@ export const FormContainer = styled(Form)`
 `
 
 export const Label = styled.label`
-  padding: 10px;
-  padding-left: 0;
-  margin-top: 10px;
   color: white;
   font-weight: 600;
+  margin-top: 8px;
+  padding-left: 0;
+  padding: 8px;
 `
 
 export const Input = styled(Field)`
-  padding: 10px 15px;
   border-radius: 5px;
   border: 0;
-  box-shadow: 0 0 10px #fff;
+  box-shadow: 0 0 8px #fff;
   color: #333;
+  padding: 8px 16px;
 `
 
 export const SubmitButton = styled.button`
-  padding: 10px 15px;
-  border-radius: 5px;
-  border: 0;
-  box-shadow: 0 0 10px #fff;
-  margin-top: 30px;
-  color: #333;
-  font-weight: bold;
   background: white;
+  border-radius: 8px;
+  border: 0;
+  box-shadow: 0 0 8px #fff;
+  color: #333;
   cursor: pointer;
+  font-weight: bold;
+  margin-top: 30px;
+  padding: 8px 16px;
   transition: all .3s;
 
   &:hover {
@@ -76,7 +76,7 @@ export const SubmitButton = styled.button`
 `
 
 export const RegisterAnchor = styled.a`
-  margin-top: 10px;
   color: white;
+  margin-top: 8px;
   text-decoration: underline;
 `
