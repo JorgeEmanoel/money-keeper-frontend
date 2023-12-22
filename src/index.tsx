@@ -10,43 +10,13 @@ import {
 
 import { ToastContainer } from 'react-toastify'
 
-// Pages
-import { LoginPage } from './pages/Login'
-import { RegisterPage } from './pages/Register'
-
 // Styles
 import 'react-toastify/dist/ReactToastify.css'
-import { HomePage } from './pages/Home'
-import { TransactionsPage } from './pages/Transactions'
-import { ProfilePage } from './pages/Profile'
+
+import { ROUTES } from './routes'
 
 // TODO: separate
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <LoginPage />
-  },
-  {
-    path: '/login',
-    element: <LoginPage />
-  },
-  {
-    path: '/register',
-    element: <RegisterPage />
-  },
-  {
-    path: '/home',
-    element: <HomePage />
-  },
-  {
-    path: '/transactions',
-    element: <TransactionsPage />
-  },
-  {
-    path: '/profile',
-    element: <ProfilePage />
-  }
-])
+const router = createBrowserRouter(ROUTES)
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

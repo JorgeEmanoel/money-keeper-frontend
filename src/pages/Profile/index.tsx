@@ -3,37 +3,53 @@ import React from 'react'
 import * as Styled from './styles'
 import { AuthPage } from '../../shared/middleware/AuthPage'
 import { BottomNavigation } from '../../shared/components/BottomNavigation'
+import { Icon } from '../../shared/components/Icon'
+import { Auth } from '../../infra/services/Auth'
+import { useNavigate } from 'react-router-dom'
+import { ProfileHeader } from '../../shared/components/ProfileHeader'
 
 const Profile = (): React.ReactElement => {
+  const navigate = useNavigate()
+
+  const logout = (): void => {
+    if (!confirm('Are you sure you want to logout?')) {
+      return
+    }
+
+    Auth.clear()
+    navigate('/')
+  }
+
   return (
     <Styled.MainContainer>
       <BottomNavigation current="profile" />
-      <Styled.TopContainer>
-        <Styled.ProfileContainer>
-          <Styled.ProfileRow>
-            <Styled.ProfileColumn>
-              <Styled.ProfilePicture src="https://i.ytimg.com/vi/cAEw1J_x6C4/hqdefault.jpg" />
-            </Styled.ProfileColumn>
-
-            <Styled.ProfileColumn>
-              <Styled.ProfileWelcomeMessage>
-                Profile
-              </Styled.ProfileWelcomeMessage>
-              <Styled.ProfileName>
-                Mr Beetle Juice
-              </Styled.ProfileName>
-            </Styled.ProfileColumn>
-          </Styled.ProfileRow>
-        </Styled.ProfileContainer>
-      </Styled.TopContainer>
+      <ProfileHeader />
 
       <Styled.BodyContainer>
         <Styled.BodyList>
-          <Styled.BodyItem href="#">
-            My Skeletons
+          <Styled.BodyItem href="#" onClick={() => { navigate('/profile/skeletons') }}>
+            Skeletons
+            <Styled.BodyItemIcon>
+              <Icon name="dollar" />
+            </Styled.BodyItemIcon>
           </Styled.BodyItem>
-          <Styled.BodyItem href="#">
+          <Styled.BodyItem href="#" onClick={() => { navigate('/profile/skeletons') }}>
+            Plans
+          </Styled.BodyItem>
+          <Styled.BodyItem href="#" onClick={() => { navigate('/profile/skeletons') }}>
+            Saving Plans
+          </Styled.BodyItem>
+          <Styled.BodyItem href="#" onClick={() => { navigate('/profile/skeletons') }}>
+            Settings
+            <Styled.BodyItemIcon>
+              <Icon name="gear" />
+            </Styled.BodyItemIcon>
+          </Styled.BodyItem>
+          <Styled.BodyItem danger={true} href="#" onClick={logout}>
             Logout
+            <Styled.BodyItemIcon>
+              <Icon name="signout" />
+            </Styled.BodyItemIcon>
           </Styled.BodyItem>
         </Styled.BodyList>
       </Styled.BodyContainer>

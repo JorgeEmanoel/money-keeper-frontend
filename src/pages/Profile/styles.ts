@@ -1,48 +1,60 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const MainContainer = styled.div``
 
-export const TopContainer = styled.header`
-  background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(200,200,200,1) 70%, rgba(150,150,150,.1) 100%);
-  display: flex;
-  flex-direction: row;
-  padding: 54px 24px;
+export const BodyContainer = styled.div`
+  padding: 20px;
 `
 
-export const ProfileContainer = styled.div`
+interface BodyItemProps {
+  danger?: boolean
+}
+export const BodyItem = styled.a<BodyItemProps>`
+  display: block;
+  text-decoration: none;
+  background: #eee;
   color: #333;
-`
-
-export const ProfileRow = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-`
-
-export const ProfileColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-`
-
-export const ProfilePicture = styled.img`
-  border-radius: 8px;
-  box-shadow: 0 0 8px #112;
-  height: 60px;
-  margin-right: 8px;
-  width: 60px;
-`
-
-export const ProfileWelcomeMessage = styled.div`
-  font-size: 12px;
-`
-
-export const ProfileName = styled.div`
   font-size: 16px;
   font-weight: bold;
+  padding: 20px;
+  border-top: 1px solid #c0c0c0;
+  border-bottom: 1px solid #eee;
+
+  &:first-child {
+    border-radius: 16px 16px 0 0;
+    border-top: none;
+  }
+
+  &:last-child {
+    border-radius: 0 0 16px 16px;
+    border-bottom: none;
+  }
+
+  ${({ danger = false }) => danger
+    ? css`
+      background: darkred;
+      color: #fff;
+    `
+    : ''}
 `
 
-export const BodyContainer = styled.div``
+export const BodyItemLogout = styled.a`
+  display: block;
+  text-decoration: none;
+  background: darkred;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 20px;
+`
 
-export const BodyList = styled.div``
+export const BodyItemIcon = styled.div`
+  display: block;
+  float: right;
+`
 
-export const BodyItem = styled.a``
+export const BodyList = styled.div`
+  border-radius: 16px;
+  box-shadow: 0 0 16px #333;
+  margin-top: -100px;
+`

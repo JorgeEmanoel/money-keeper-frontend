@@ -5,28 +5,13 @@ import { AuthPage } from '../../shared/middleware/AuthPage'
 
 import * as Styled from './styles'
 
+import { ProfileHeader } from '../../shared/components/ProfileHeader'
+
 const Home = (): React.ReactElement => {
   return (
     <Styled.MainContainer>
       <BottomNavigation current="home" />
-      <Styled.TopContainer>
-        <Styled.ProfileContainer>
-          <Styled.ProfileRow>
-            <Styled.ProfileColumn>
-              <Styled.ProfilePicture src="https://i.ytimg.com/vi/cAEw1J_x6C4/hqdefault.jpg" />
-            </Styled.ProfileColumn>
-
-            <Styled.ProfileColumn>
-              <Styled.ProfileWelcomeMessage>
-                Welcome back,
-              </Styled.ProfileWelcomeMessage>
-              <Styled.ProfileName>
-                Mr Beetle Juice
-              </Styled.ProfileName>
-            </Styled.ProfileColumn>
-          </Styled.ProfileRow>
-        </Styled.ProfileContainer>
-      </Styled.TopContainer>
+      <ProfileHeader />
 
       <Styled.BodyContainer>
         <Styled.CardContainer>
