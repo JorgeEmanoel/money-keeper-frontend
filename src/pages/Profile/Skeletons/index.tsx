@@ -4,16 +4,28 @@ import * as Styled from './styles'
 
 import { AuthPage } from '../../../shared/middleware/AuthPage'
 import { BottomNavigation } from '../../../shared/components/BottomNavigation'
+import { Icon } from '../../../shared/components/Icon'
+import { BottomSheet } from '../../../shared/components/BottomSheet'
 // import { Icon } from '../../../shared/components/Icon'
 
 type DirectionType = 'income' | 'outcome'
 
 const Skeletons = (): React.ReactElement => {
   const [direction, setDirection] = useState<DirectionType>('income')
+  const [creating, setCreating] = useState(false)
 
   return (
     <Styled.MainContainer>
+      {creating && (
+        <BottomSheet onDismiss={() => { setCreating(false) }}>
+          Bom dia
+        </BottomSheet>
+      )}
+
       <BottomNavigation current="profile" />
+      <Styled.AddButton type="button" onClick={() => { setCreating(true) }}>
+        <Icon name="plus" />
+      </Styled.AddButton>
 
       <Styled.Title>Skeletons</Styled.Title>
       <Styled.FilterContainer>
