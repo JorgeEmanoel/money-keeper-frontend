@@ -1,8 +1,10 @@
 import React from 'react'
 
 import * as Styled from './styles'
+import { User } from '../../../infra/services/User'
 
 export const ProfileHeader = (): React.ReactElement => {
+  const user = User.me()
   return (
     <Styled.TopContainer>
       <Styled.ProfileContainer>
@@ -16,7 +18,7 @@ export const ProfileHeader = (): React.ReactElement => {
                 Welcome back,
             </Styled.ProfileWelcomeMessage>
             <Styled.ProfileName>
-                Mr Beetle Juice
+                Mr {user.name}
             </Styled.ProfileName>
           </Styled.ProfileColumn>
         </Styled.ProfileRow>

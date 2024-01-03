@@ -12,7 +12,8 @@ export const BackDrop = styled.div`
 
 export const Container = styled.div`
   position: absolute;
-  height: 80%;
+  height: 85%;
+  overflow-y: scroll;
   bottom: 0;
   left: 0;
   right: 0;

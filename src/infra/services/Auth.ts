@@ -1,6 +1,7 @@
 import { BaseService } from '../shared/services/BaseService'
 
 export const LOCAL_STORAGE_TOKEN_KEY = String(process.env.REACT_APP_LOCAL_STORAGE_TOKEN_KEY)
+export const LOCAL_STORAGE_ME_KEY = String(process.env.REACT_APP_LOCAL_STORAGE_ME_KEY)
 
 export interface LoginResponse {
   token: string
@@ -76,5 +77,6 @@ export const Auth = {
   },
   clear: (): void => {
     localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
+    localStorage.removeItem(LOCAL_STORAGE_ME_KEY)
   }
 }

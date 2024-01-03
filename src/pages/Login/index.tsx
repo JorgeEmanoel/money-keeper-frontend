@@ -9,6 +9,7 @@ import { Formik } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '../../shared/components/Icon'
 import { GuestPage } from '../../shared/middleware/GuestPage'
+import { User } from '../../infra/services/User'
 
 const Login = (): React.ReactElement => {
   const navigate = useNavigate()
@@ -39,12 +40,12 @@ const Login = (): React.ReactElement => {
           }
 
           Auth.saveToken(token)
+          await User.retrieveAndPersistMe()
           navigate('/home')
         }}
       >
         {({
-          isSubmitting,
-          handleSubmit
+          isSubmitting
         }) => (
           <Styled.FormContainer>
             <Styled.Label>E-mail:</Styled.Label>
