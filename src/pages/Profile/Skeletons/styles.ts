@@ -5,7 +5,7 @@ export const MainContainer = styled.div`
   margin: 0;
   background: #eeeee;
   padding: 32px 16px;
-  padding-bottom: 80px;
+  padding-bottom: 120px;
 `
 
 export const Title = styled.h2`
@@ -176,6 +176,42 @@ export const SubmitButton = styled.button`
   border: 0;
   box-shadow: 0 0 10px #fff;
   color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 32px;
+  padding: 16px;
+  transition: all .3s;
+
+  &:hover {
+    background: #fee;
+    box-shadow: 0 0 2px #c0c0c0;
+  }
+`
+
+export const DeleteButton = styled.button`
+  background: darkred;
+  border-radius: 8px;
+  border: 0;
+  box-shadow: 0 0 10px #fff;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 32px;
+  padding: 16px;
+  transition: all .3s;
+
+  &:hover {
+    background: #fee;
+    box-shadow: 0 0 2px #c0c0c0;
+  }
+`
+
+export const CancelButton = styled.button`
+  background: #eee;
+  border-radius: 8px;
+  border: 0;
+  box-shadow: 0 0 10px #fff;
+  color: #333;
   cursor: pointer;
   font-weight: bold;
   margin-top: 32px;

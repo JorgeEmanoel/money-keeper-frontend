@@ -14,6 +14,7 @@ import { type TSkeleton, type TCurrency, type TDirection, type TFrequency } from
 interface SkeletonState {
   loading: boolean
   items: TSkeleton[]
+  total: number
 }
 
 const Skeletons = (): React.ReactElement => {
@@ -21,13 +22,15 @@ const Skeletons = (): React.ReactElement => {
   const [creating, setCreating] = useState(false)
   const [skeletonsState, setSkeletonsState] = useState<SkeletonState>({
     loading: false,
-    items: []
+    items: [],
+    total: 0
   })
+  const [excluding, setExcluding] = useState(0)
 
   const user = User.me()
 
   const fetchAndRenderSkeletons = async (): Promise<void> => {
-    setSkeletonsState(before => ({ items: before.items, loading: true }))
+    setSkeletonsState(before => ({ items: before.items, total: before.total, loading: true }))
 
     const fetchingMap = {
       income: Skeleton.incoming,
@@ -36,12 +39,25 @@ const Skeletons = (): React.ReactElement => {
 
     const skeletons = await fetchingMap[direction](user.currentPlanId)
     let items: TSkeleton[] = []
+    let total = skeletonsState.total
 
     if (skeletons.ok) {
       items = skeletons.skeletons
+      total = skeletons.total
     }
 
-    setSkeletonsState({ items, loading: false })
+    setSkeletonsState({ items, loading: false, total })
+  }
+
+  const exclude = async (): Promise<void> => {
+    const result = await Skeleton.exclude(user.currentPlanId, excluding)
+
+    if (!result.ok) {
+      alert('Failed to delete exclude')
+    }
+
+    setExcluding(0)
+    await fetchAndRenderSkeletons()
   }
 
   useEffect(() => {
@@ -93,9 +109,7 @@ const Skeletons = (): React.ReactElement => {
 
                 <Styled.Label>Frequency</Styled.Label>
                 <Styled.Input name="frequency" as="select" required>
-                  <option>Monthly</option>
-                  <option>Anual</option>
-                  <option>Random</option>
+                  <option value="monthly">Monthly</option>
                 </Styled.Input>
 
                 <Styled.Label>Value</Styled.Label>
@@ -103,8 +117,7 @@ const Skeletons = (): React.ReactElement => {
 
                 <Styled.Label>Currency</Styled.Label>
                 <Styled.Input name="currency" as="select" required>
-                  <option>BRL</option>
-                  <option>USD</option>
+                  <option value="BRL">BRL</option>
                 </Styled.Input>
 
                 <Styled.SubmitButton type="submit" disabled={isSubmitting}>
@@ -116,6 +129,23 @@ const Skeletons = (): React.ReactElement => {
           </Formik>
         </BottomSheet>
       )}
+
+      {excluding !== 0 && (
+        <BottomSheet onDismiss={() => { setExcluding(0) }}>
+          Delete?
+
+          <br />
+
+          <Styled.CancelButton onClick={() => { setExcluding(0) }}>
+            Cancel
+          </Styled.CancelButton>
+
+          <Styled.DeleteButton onClick={() => { exclude().catch(console.error) }}>
+            Yes, delete <Icon name="trash" />
+          </Styled.DeleteButton>
+        </BottomSheet>
+      )}
+
       <BottomNavigation current="profile" />
       <Styled.AddButton type="button" onClick={() => { setCreating(true) }}>
         <Icon name="plus" />
@@ -140,7 +170,7 @@ const Skeletons = (): React.ReactElement => {
               Total
             </Styled.ResumeLabel>
             <Styled.ResumeValue>
-              1250 USD
+              {skeletonsState.total} BRL
             </Styled.ResumeValue>
           </Styled.ResumeItem>
         </Styled.ResumeContainer>
@@ -151,7 +181,7 @@ const Skeletons = (): React.ReactElement => {
 
         <Styled.SkeletonsList>
           {skeletonsState.items.map(item => (
-            <Styled.SkeletonItem key={`skeleton-${item.id}`}>
+            <Styled.SkeletonItem key={`skeleton-${item.id}`} onClick={() => { setExcluding(item.id) }}>
               <Styled.SkeletonColumn>
                 <Styled.SkeletonTitle>{item.name}</Styled.SkeletonTitle>
                 <Styled.SkeletonCreated>{item.description}</Styled.SkeletonCreated>
