@@ -11,11 +11,15 @@ import { Plan } from '../../infra/services/Plan'
 import { Icon } from '../../shared/components/Icon'
 import { type TTransaction } from '../../infra/shared/types/Transactions'
 import { Transaction } from '../../infra/services/Transaction'
+import { type TInitStatus } from '../../infra/shared/types/Plan'
+import { FAB } from '../../shared/components/FAB'
 
 interface SummaryProps {
   totalIncomings: number
   totalOutcomings: number
   balance: number
+  initStatus: TInitStatus
+  loadingInit: boolean
 }
 
 interface TransactionsState {
@@ -29,10 +33,13 @@ const Home = (): React.ReactElement => {
     items: []
   })
   const [loadingSummary, setLoadingSummary] = useState(false)
+  const [loadingInit, setLoadingInit] = useState(false)
   const [summary, setSummary] = useState<SummaryProps>({
     totalIncomings: 0,
     totalOutcomings: 0,
-    balance: 0
+    balance: 0,
+    initStatus: 'initiated',
+    loadingInit: false
   })
 
   const fetchSummary = async (): Promise<void> => {
@@ -43,7 +50,9 @@ const Home = (): React.ReactElement => {
     setSummary({
       totalOutcomings: result.totalOutcomings,
       totalIncomings: result.totalIncomings,
-      balance: result.balance
+      balance: result.balance,
+      initStatus: result.initStatus,
+      loadingInit: false
     })
 
     setLoadingSummary(false)
@@ -62,6 +71,22 @@ const Home = (): React.ReactElement => {
     setTransactionsState({ items, loading: true })
   }
 
+  const handleInit = async (): Promise<void> => {
+    setLoadingInit(true)
+    const result = await Plan.init(format(new Date(), 'yyyy-MM'))
+    setLoadingInit(false)
+
+    if (!result.ok) {
+      alert(result.message)
+      return
+    }
+
+    await Promise.all([
+      fetchTransactions(),
+      fetchSummary()
+    ])
+  }
+
   useEffect(() => {
     fetchSummary().catch(console.error)
     fetchTransactions().catch(console.error)
@@ -71,6 +96,14 @@ const Home = (): React.ReactElement => {
     <Styled.MainContainer>
       <BottomNavigation current="home" />
       <ProfileHeader />
+      {summary.initStatus === 'pending' && (
+        <FAB
+          disabled={loadingInit}
+          spinner={loadingInit}
+          iconName="play"
+          onClick={() => { handleInit().catch(console.error) }}
+        />
+      )}
 
       <Styled.BodyContainer>
         <Styled.CardContainer>
