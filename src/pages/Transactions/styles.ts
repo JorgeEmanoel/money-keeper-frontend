@@ -106,6 +106,7 @@ export const TransactionItem = styled.button`
   color: #ffffff;
   display: flex;
   flex-direction: row;
+  text-align: left;
   justify-content: space-between;
   margin: 8px 0;
   padding: 16px;

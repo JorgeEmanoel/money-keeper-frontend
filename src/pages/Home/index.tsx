@@ -60,7 +60,7 @@ const Home = (): React.ReactElement => {
 
   const fetchTransactions = async (): Promise<void> => {
     setTransactionsState(before => ({ ...before, loading: true }))
-    const result = await Transaction.outcoming()
+    const result = await Transaction.outcoming(format(new Date(), 'yyyy-MM'))
 
     let items: TTransaction[] = []
 
@@ -77,7 +77,7 @@ const Home = (): React.ReactElement => {
     setLoadingInit(false)
 
     if (!result.ok) {
-      alert(result.message)
+      setTimeout(alert, 500, result.message)
       return
     }
 
@@ -110,7 +110,7 @@ const Home = (): React.ReactElement => {
           <Styled.CardRow>
             <Styled.CardColumn>
               <Styled.CardSelector>
-                March
+                Summary
               </Styled.CardSelector>
             </Styled.CardColumn>
           </Styled.CardRow>

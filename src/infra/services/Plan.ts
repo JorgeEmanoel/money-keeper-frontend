@@ -26,7 +26,7 @@ interface InitResponse {
 }
 
 export const Plan = {
-  summary: async (reference: string): Promise<SummaryPayload> => await BaseAuthService().get(`/plans/summary/${reference}`).then((response: AxiosResponse<SummaryResponse>) => ({
+  summary: async (period: string): Promise<SummaryPayload> => await BaseAuthService().get(`/plans/summary/${period}`).then((response: AxiosResponse<SummaryResponse>) => ({
     totalIncomings: response.data.totalIncomings,
     totalOutcomings: response.data.totalOutcomings,
     balance: response.data.balance,
@@ -40,7 +40,7 @@ export const Plan = {
       initStatus: 'pending'
     }
   }),
-  init: async (reference: string): Promise<InitPayload> => await BaseAuthService().get(`/plans/init/${reference}`).then((response: AxiosResponse<InitResponse>) => ({
+  init: async (period: string): Promise<InitPayload> => await BaseAuthService().get(`/plans/init/${period}`).then((response: AxiosResponse<InitResponse>) => ({
     ok: true,
     message: response.data.message
   })).catch(err => {

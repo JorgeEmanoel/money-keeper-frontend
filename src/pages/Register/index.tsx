@@ -8,6 +8,7 @@ import { Formik } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '../../shared/components/Icon'
 import { GuestPage } from '../../shared/middleware/GuestPage'
+import { User } from '../../infra/services/User'
 
 const Register = (): React.ReactElement => {
   const navigate = useNavigate()
@@ -21,6 +22,7 @@ const Register = (): React.ReactElement => {
     }
 
     Auth.saveToken(token)
+    await User.retrieveAndPersistMe()
     navigate('/home')
   }
   return (

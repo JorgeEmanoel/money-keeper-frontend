@@ -1,3 +1,4 @@
+import { type AxiosResponse } from 'axios'
 import { BaseAuthService } from '../shared/services/BaseAuthService'
 import { type TStatus, type TTransaction } from '../shared/types/Transactions'
 
@@ -21,31 +22,46 @@ interface DeleteTransactionPayload {
 interface ListPayload {
   ok: boolean
   transactions: TTransaction[]
+  totalPending: number
+  total: number
 }
 
 interface ListResponse {
-  data: {
-    transactions?: TTransaction[]
-  }
+  transactions: TTransaction[]
+  totalPending: number
+  total: number
 }
 
 export const Transaction = {
-  outcoming: async (): Promise<ListPayload> => await BaseAuthService().get('/transactions/outcoming').then((response: ListResponse) => {
-    let transactions: TTransaction[] = []
-
-    if (response.data.transactions !== null && typeof response.data.transactions !== 'undefined' && response.data.transactions.length > 0) {
-      transactions = response.data.transactions
-    }
-
+  outcoming: async (period: string): Promise<ListPayload> => await BaseAuthService().get(`/transactions/outcoming/${period}`).then((response: AxiosResponse<ListResponse>) => {
     return {
       ok: true,
-      transactions
+      transactions: response.data.transactions,
+      totalPending: response.data.totalPending,
+      total: response.data.total
     }
   }).catch(err => {
     console.error('Failed to list outcoming Transaction: ', err)
     return {
       ok: false,
       transactions: [],
+      totalPending: 0,
+      total: 0
+    }
+  }),
+  incoming: async (period: string): Promise<ListPayload> => await BaseAuthService().get(`/transactions/incoming/${period}`).then((response: AxiosResponse<ListResponse>) => {
+    return {
+      ok: true,
+      transactions: response.data.transactions,
+      total: response.data.total,
+      totalPending: response.data.totalPending
+    }
+  }).catch(err => {
+    console.error('Failed to list outcoming Transaction: ', err)
+    return {
+      ok: false,
+      transactions: [],
+      totalPending: 0,
       total: 0
     }
   }),
