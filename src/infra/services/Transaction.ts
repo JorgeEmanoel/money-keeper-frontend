@@ -1,14 +1,14 @@
 import { type AxiosResponse } from 'axios'
 import { BaseAuthService } from '../shared/services/BaseAuthService'
-import { type TStatus, type TTransaction } from '../shared/types/Transactions'
+import { type TCurrency, type TDirection, type TTransaction } from '../shared/types/Transactions'
 
 interface NewTransactionBody {
   name: string
   description: string
-  status: TStatus
   value: number
-  currency: 'BRL' | 'USD'
-  direction: 'income' | 'outcome'
+  currency: TCurrency
+  direction: TDirection
+  period: string
 }
 
 interface NewTransactionPayload {

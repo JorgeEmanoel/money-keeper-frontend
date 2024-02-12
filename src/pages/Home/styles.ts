@@ -55,9 +55,16 @@ export const CardColumn = styled.div`
   flex-direction: column;
 `
 
-export const CardSelector = styled.div`
+export const CardSelector = styled.button`
   font-size: 24px;
   font-weight: bold;
+  padding: 16px;
+  margin: -16px;
+  background: none;
+  border: none;
+  box-shadown: none;
+  outline: none;
+  color: white;
 `
 
 export const CardLabel = styled.span`

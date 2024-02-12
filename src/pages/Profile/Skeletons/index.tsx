@@ -136,13 +136,19 @@ const Skeletons = (): React.ReactElement => {
 
           <br />
 
-          <Styled.CancelButton onClick={() => { setExcluding(0) }}>
-            Cancel
-          </Styled.CancelButton>
+          <Styled.DeleteContainer>
+            <Styled.ButtonContainer>
+              <Styled.CancelButton onClick={() => { setExcluding(0) }}>
+                Cancel
+              </Styled.CancelButton>
+            </Styled.ButtonContainer>
 
-          <Styled.DeleteButton onClick={() => { exclude().catch(console.error) }}>
-            Yes, delete <Icon name="trash" />
-          </Styled.DeleteButton>
+            <Styled.ButtonContainer>
+              <Styled.DeleteButton onClick={() => { exclude().catch(console.error) }}>
+                Yes, delete <Icon name="trash" />
+              </Styled.DeleteButton>
+            </Styled.ButtonContainer>
+          </Styled.DeleteContainer>
         </BottomSheet>
       )}
 

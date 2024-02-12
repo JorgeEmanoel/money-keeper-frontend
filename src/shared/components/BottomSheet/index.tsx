@@ -6,9 +6,10 @@ import { Icon } from '../Icon'
 interface BottomSheetProps {
   children: React.ReactNode
   onDismiss: () => void
+  title?: string
 }
 
-export const BottomSheet: React.FC<BottomSheetProps> = ({ children, onDismiss }): React.ReactElement => {
+export const BottomSheet: React.FC<BottomSheetProps> = ({ children, onDismiss, title = '' }): React.ReactElement => {
   const backdropRef = useRef(null)
   const onClick = (ev: React.MouseEvent): void => {
     if (ev.target !== backdropRef.current) {
@@ -21,6 +22,9 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ children, onDismiss })
   return (
     <Styled.BackDrop onClick={onClick} ref={backdropRef}>
       <Styled.Container>
+        {title.length > 0 && (
+          <Styled.Title>{title}</Styled.Title>
+        )}
         <Styled.CloseButton type="button" onClick={onDismiss}>
           <Icon name="times" />
         </Styled.CloseButton>

@@ -13,6 +13,7 @@ import { type TTransaction } from '../../infra/shared/types/Transactions'
 import { Transaction } from '../../infra/services/Transaction'
 import { type TInitStatus } from '../../infra/shared/types/Plan'
 import { FAB } from '../../shared/components/FAB'
+import { Period } from '../../infra/services/Period'
 
 interface SummaryProps {
   totalIncomings: number
@@ -110,7 +111,9 @@ const Home = (): React.ReactElement => {
           <Styled.CardRow>
             <Styled.CardColumn>
               <Styled.CardSelector>
-                Summary
+                {format(new Date(Period.current()), 'MM/yyyy')}
+                {'    '}
+                <Icon name='pencil' fontSize={16} />
               </Styled.CardSelector>
             </Styled.CardColumn>
           </Styled.CardRow>

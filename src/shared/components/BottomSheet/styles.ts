@@ -35,3 +35,10 @@ export const CloseButton = styled.button`
   background: none;
   font-size: 24px;
 `
+
+export const Title = styled.h4`
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: -8px;
+  color: #666;
+`

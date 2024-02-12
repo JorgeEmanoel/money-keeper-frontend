@@ -8,6 +8,9 @@ import { AuthPage } from '../../shared/middleware/AuthPage'
 import * as Styled from './styles'
 import { type TTransaction } from '../../infra/shared/types/Transactions'
 import { Transaction } from '../../infra/services/Transaction'
+import { BottomSheet } from '../../shared/components/BottomSheet'
+import { Create } from './Forms/Create'
+import { FAB } from '../../shared/components/FAB'
 
 type DirectionType = 'income' | 'outcome'
 
@@ -26,6 +29,8 @@ const Transactions = (): React.ReactElement => {
     total: 0,
     totalPending: 0
   })
+  const [creating, setCreating] = useState(false)
+
   const fetchTransactions = async (): Promise<void> => {
     setTransactionsState(before => ({ ...before, loading: true }))
     let items: TTransaction[] = []
@@ -60,6 +65,17 @@ const Transactions = (): React.ReactElement => {
   return (
     <Styled.MainContainer>
       <BottomNavigation current="transactions" />
+
+      <FAB iconName='plus' onClick={() => { setCreating(true) }} spinner={false} />
+
+      {creating && (
+        <BottomSheet onDismiss={() => { setCreating(false) }} title={`Create a new ODD ${direction}`}>
+          <Create direction={direction} afterCreate={() => {
+            setCreating(false)
+            fetchTransactions().catch(console.error)
+          }} />
+        </BottomSheet>
+      )}
 
       <Styled.Title>Transactions</Styled.Title>
       <Styled.FilterContainer>

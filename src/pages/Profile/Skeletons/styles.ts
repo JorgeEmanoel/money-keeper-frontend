@@ -188,6 +188,19 @@ export const SubmitButton = styled.button`
   }
 `
 
+export const DeleteContainer = styled.div`
+  position: absolute;
+  bottom: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  left: 0;
+  right: 0;
+`
+
+export const ButtonContainer = styled.div`
+`
+
 export const DeleteButton = styled.button`
   background: darkred;
   border-radius: 8px;
