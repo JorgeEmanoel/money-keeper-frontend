@@ -29,7 +29,7 @@ export const Create: React.FC<CreateProps> = ({ afterCreate, direction }) => {
           name,
           description,
           direction,
-          period,
+          period: period.filterFormat,
           value: Number(value),
           currency: 'BRL'
         })

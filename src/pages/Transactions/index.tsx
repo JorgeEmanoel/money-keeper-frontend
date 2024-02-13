@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { format } from 'date-fns'
+import { useLongPress } from 'use-long-press'
 
 import { BottomNavigation } from '../../shared/components/BottomNavigation'
-// import { Icon } from '../../shared/components/Icon'
 import { AuthPage } from '../../shared/middleware/AuthPage'
 
 import * as Styled from './styles'
-import { type TTransaction } from '../../infra/shared/types/Transactions'
+import { type TStatus, type TDirection, type TTransaction, TRANSACTION_STATUS } from '../../infra/shared/types/Transactions'
 import { Transaction } from '../../infra/services/Transaction'
 import { BottomSheet } from '../../shared/components/BottomSheet'
 import { Create } from './Forms/Create'
 import { FAB } from '../../shared/components/FAB'
-
-type DirectionType = 'income' | 'outcome'
+import { Period } from '../../infra/services/Period'
+import { Icon } from '../../shared/components/Icon'
 
 interface TransactionsState {
   items: TTransaction[]
@@ -21,8 +20,13 @@ interface TransactionsState {
   loading: boolean
 }
 
+interface UpdatingTransactionState {
+  item: TTransaction | null
+  updating: boolean
+}
+
 const Transactions = (): React.ReactElement => {
-  const [direction, setDirection] = useState<DirectionType>('income')
+  const [direction, setDirection] = useState<TDirection>('income')
   const [transactionsState, setTransactionsState] = useState<TransactionsState>({
     items: [],
     loading: true,
@@ -30,6 +34,18 @@ const Transactions = (): React.ReactElement => {
     totalPending: 0
   })
   const [creating, setCreating] = useState(false)
+  const [updatingTransaction, setUpdatingTransaction] = useState<UpdatingTransactionState>({
+    item: null,
+    updating: false
+  })
+
+  const bindTransactionLongPress = useLongPress((_, { context: item }) => {
+    // TODO: fix type
+    setUpdatingTransaction({
+      item: item as TTransaction,
+      updating: true
+    })
+  })
 
   const fetchTransactions = async (): Promise<void> => {
     setTransactionsState(before => ({ ...before, loading: true }))
@@ -42,7 +58,7 @@ const Transactions = (): React.ReactElement => {
       outcome: Transaction.outcoming
     }
 
-    const result = await fetchMapping[direction](format(new Date(), 'yyyy-MM'))
+    const result = await fetchMapping[direction](Period.current().filterFormat)
 
     if (result.ok) {
       items = result.transactions
@@ -58,9 +74,23 @@ const Transactions = (): React.ReactElement => {
     })
   }
 
+  const updateStatus = async (id: number, status: TStatus): Promise<void> => {
+    const response = await Transaction.changeStatus(id, status)
+
+    if (!response.ok) {
+      alert('Failed to update transaction status')
+      return
+    }
+
+    setUpdatingTransaction({
+      updating: false,
+      item: null
+    })
+  }
+
   useEffect(() => {
     fetchTransactions().catch(console.error)
-  }, [direction])
+  }, [direction, updatingTransaction])
 
   return (
     <Styled.MainContainer>
@@ -74,6 +104,41 @@ const Transactions = (): React.ReactElement => {
             setCreating(false)
             fetchTransactions().catch(console.error)
           }} />
+        </BottomSheet>
+      )}
+
+      {updatingTransaction.updating && (
+        <BottomSheet title='Update transaction' center onDismiss={() => {
+          setUpdatingTransaction({
+            updating: false,
+            item: null
+          })
+        }}>
+          <Styled.UpdateTransactionContainer>
+            <p>Please, select the new transaction status:</p>
+
+            <Styled.UpdateTransactionButtonContainer>
+              <Styled.CanceledButton onClick={() => {
+                if (updatingTransaction.item === null) {
+                  return
+                }
+
+                updateStatus(updatingTransaction.item?.id, TRANSACTION_STATUS.CANCELED).catch(console.error)
+              }}>
+                Canceled <Icon name='times' spin={false} />
+              </Styled.CanceledButton>
+
+              <Styled.PaidButton onClick={() => {
+                if (updatingTransaction.item === null) {
+                  return
+                }
+
+                updateStatus(updatingTransaction.item?.id, TRANSACTION_STATUS.PAID).catch(console.error)
+              }}>
+                Paid <Icon name='check' spin={false} />
+              </Styled.PaidButton>
+            </Styled.UpdateTransactionButtonContainer>
+          </Styled.UpdateTransactionContainer>
         </BottomSheet>
       )}
 
@@ -113,15 +178,20 @@ const Transactions = (): React.ReactElement => {
 
         <Styled.TransactionsList>
           {transactionsState.items.map(item => (
-            <Styled.TransactionItem key={`transactions-${item.id}`}>
+            <Styled.TransactionItem
+              status={item.status}
+              id={`transaction-${item.id}`}
+              key={`transactions-${item.id}`}
+              {...bindTransactionLongPress(item)}
+            >
               <Styled.TransactionColumn>
-                <Styled.TransactionTitle>{item.name}</Styled.TransactionTitle>
+                <Styled.TransactionTitle status={item.status}>{item.name}</Styled.TransactionTitle>
                 <Styled.TransactionUpdated>{item.description}</Styled.TransactionUpdated>
               </Styled.TransactionColumn>
 
               <Styled.TransactionColumn>
-                <Styled.TransactionValue>{item.value.toLocaleString()} BRL</Styled.TransactionValue>
-                <Styled.TransactionStatus>{item.status.toUpperCase()}</Styled.TransactionStatus>
+                <Styled.TransactionValue status={item.status}>{item.value.toLocaleString()} BRL</Styled.TransactionValue>
+                <Styled.TransactionStatus status={item.status}>{item.status.toUpperCase()}</Styled.TransactionStatus>
               </Styled.TransactionColumn>
             </Styled.TransactionItem>
           ))}

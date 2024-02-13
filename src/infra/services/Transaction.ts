@@ -1,6 +1,6 @@
 import { type AxiosResponse } from 'axios'
 import { BaseAuthService } from '../shared/services/BaseAuthService'
-import { type TCurrency, type TDirection, type TTransaction } from '../shared/types/Transactions'
+import { type TStatus, type TCurrency, type TDirection, type TTransaction } from '../shared/types/Transactions'
 
 interface NewTransactionBody {
   name: string
@@ -16,6 +16,10 @@ interface NewTransactionPayload {
 }
 
 interface DeleteTransactionPayload {
+  ok: boolean
+}
+
+interface UpdateTransactionStatusPayload {
   ok: boolean
 }
 
@@ -77,6 +81,14 @@ export const Transaction = {
     ok: true
   })).catch(err => {
     console.error('Failed to delete Transaction: ', err)
+    return {
+      ok: false
+    }
+  }),
+  changeStatus: async (id: number, status: TStatus): Promise<UpdateTransactionStatusPayload> => await BaseAuthService().put(`/transactions/${id}/status/${status}`).then(() => ({
+    ok: true
+  })).catch(err => {
+    console.error('Failed to update Transaction status: ', err)
     return {
       ok: false
     }

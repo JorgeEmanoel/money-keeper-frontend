@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { format } from 'date-fns'
 
 import { BottomNavigation } from '../../shared/components/BottomNavigation'
 import { AuthPage } from '../../shared/middleware/AuthPage'
@@ -14,6 +13,8 @@ import { Transaction } from '../../infra/services/Transaction'
 import { type TInitStatus } from '../../infra/shared/types/Plan'
 import { FAB } from '../../shared/components/FAB'
 import { Period } from '../../infra/services/Period'
+import { BottomSheet } from '../../shared/components/BottomSheet'
+import { PickPeriod } from './Forms/PickPeriod'
 
 interface SummaryProps {
   totalIncomings: number
@@ -42,11 +43,12 @@ const Home = (): React.ReactElement => {
     initStatus: 'initiated',
     loadingInit: false
   })
+  const [pickingPeriod, setPickingPeriod] = useState(false)
 
   const fetchSummary = async (): Promise<void> => {
     setLoadingSummary(true)
 
-    const result = await Plan.summary(format(new Date(), 'yyyy-MM'))
+    const result = await Plan.summary(Period.current().filterFormat)
 
     setSummary({
       totalOutcomings: result.totalOutcomings,
@@ -61,7 +63,7 @@ const Home = (): React.ReactElement => {
 
   const fetchTransactions = async (): Promise<void> => {
     setTransactionsState(before => ({ ...before, loading: true }))
-    const result = await Transaction.outcoming(format(new Date(), 'yyyy-MM'))
+    const result = await Transaction.outcoming(Period.current().filterFormat)
 
     let items: TTransaction[] = []
 
@@ -74,7 +76,7 @@ const Home = (): React.ReactElement => {
 
   const handleInit = async (): Promise<void> => {
     setLoadingInit(true)
-    const result = await Plan.init(format(new Date(), 'yyyy-MM'))
+    const result = await Plan.init(Period.current().filterFormat)
     setLoadingInit(false)
 
     if (!result.ok) {
@@ -91,11 +93,24 @@ const Home = (): React.ReactElement => {
   useEffect(() => {
     fetchSummary().catch(console.error)
     fetchTransactions().catch(console.error)
-  }, [])
+  }, [pickingPeriod])
 
   return (
     <Styled.MainContainer>
       <BottomNavigation current="home" />
+      {pickingPeriod && (
+        <BottomSheet onDismiss={() => { setPickingPeriod(false) } } title='Pick a new period' center={true}>
+          <PickPeriod
+            defaultMonth={Period.month()}
+            defaultYear={Period.year()}
+            onPick={(month: number, year: number) => {
+              Period.setCurrent(month, year)
+              setPickingPeriod(false)
+            }}
+          />
+        </BottomSheet>
+      )}
+
       <ProfileHeader />
       {summary.initStatus === 'pending' && (
         <FAB
@@ -110,9 +125,9 @@ const Home = (): React.ReactElement => {
         <Styled.CardContainer>
           <Styled.CardRow>
             <Styled.CardColumn>
-              <Styled.CardSelector>
-                {format(new Date(Period.current()), 'MM/yyyy')}
-                {'    '}
+              <Styled.CardSelector onClick={() => { setPickingPeriod(true) }}>
+                {Period.current().displayFormat}
+                {' '}
                 <Icon name='pencil' fontSize={16} />
               </Styled.CardSelector>
             </Styled.CardColumn>

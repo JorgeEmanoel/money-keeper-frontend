@@ -72,7 +72,6 @@ export const Auth = {
   },
   authenticated: (): boolean => {
     const token = Auth.token()
-    console.debug('Token checked: ', { token })
     return token.length > 0
   },
   clear: (): void => {

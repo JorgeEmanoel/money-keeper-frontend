@@ -2,7 +2,7 @@
 import React from 'react'
 
 import { FontAwesomeIcon, type FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
-import { type IconDefinition, faSpinner, faMinus, faBars, faHome, faUser, faCaretDown, faArrowRight, faSignOut, faDollarSign, faGear, faPlus, faTimes, faTrash, faPlay, faPencil } from '@fortawesome/free-solid-svg-icons'
+import { type IconDefinition, faSpinner, faMinus, faBars, faHome, faUser, faCaretDown, faArrowRight, faSignOut, faDollarSign, faGear, faPlus, faTimes, faTrash, faPlay, faPencil, faSave, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 type MappedIconsType = Record<string, IconDefinition>
 
@@ -20,7 +20,9 @@ const mappedIcons: MappedIconsType = {
   times: faTimes,
   trash: faTrash,
   play: faPlay,
-  pencil: faPencil
+  pencil: faPencil,
+  save: faSave,
+  check: faCheck
 }
 
 interface IconProps extends Omit<FontAwesomeIconProps, 'icon'> {

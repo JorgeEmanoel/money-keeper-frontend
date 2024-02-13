@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const BackDrop = styled.div`
   position: fixed;
@@ -10,7 +10,10 @@ export const BackDrop = styled.div`
   z-index: 998;
 `
 
-export const Container = styled.div`
+interface ContainerProps {
+  center: boolean
+}
+export const Container = styled.div<ContainerProps>`
   position: absolute;
   height: 85%;
   overflow-y: scroll;
@@ -21,6 +24,14 @@ export const Container = styled.div`
   border-radius: 16px 16px 0 0;
   background: #fff;
   padding-top: 32px;
+
+  ${({ center }) => center
+    ? css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    `
+    : ''}
 `
 
 export const CloseButton = styled.button`
@@ -37,6 +48,9 @@ export const CloseButton = styled.button`
 `
 
 export const Title = styled.h4`
+  position: absolute;
+  top: 24px;
+  left: 24px;
   font-size: 20px;
   font-weight: bold;
   margin-top: -8px;

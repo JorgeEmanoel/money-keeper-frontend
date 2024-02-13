@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import { TRANSACTION_STATUS, type TStatus } from '../../infra/shared/types/Transactions'
 
 export const MainContainer = styled.div`
   margin: 0;
@@ -98,7 +99,10 @@ export const TransactionsListTitle = styled.h4``
 
 export const TransactionsList = styled.div``
 
-export const TransactionItem = styled.button`
+interface TransactionItemProps {
+  status: TStatus
+}
+export const TransactionItem = styled.button<TransactionItemProps>`
   background: #333;
   border-radius: 16px;
   border: none;
@@ -111,28 +115,132 @@ export const TransactionItem = styled.button`
   margin: 8px 0;
   padding: 16px;
   width: 100%;
+
+  ${({ status }) => status === TRANSACTION_STATUS.CANCELED
+    ? css`
+    background: #eee;
+    color: #333;
+    `
+    : ''}
+
+  ${({ status }) => status === TRANSACTION_STATUS.PAID
+    ? css`
+    background: #fff;
+    border-left: 5px solid rgba(98,22,173,1); 
+    `
+    : ''}
 `
 
 export const TransactionColumn = styled.div``
 
-export const TransactionTitle = styled.div`
+interface TransactionTitleProps {
+  status: TStatus
+}
+export const TransactionTitle = styled.div<TransactionTitleProps>`
   font-weight: bold;
   font-size: 18px;
+
+  ${({ status }) => status === TRANSACTION_STATUS.CANCELED
+    ? css`
+    color: #c0c0c0;
+    text-decoration: line-through;
+    `
+    : ''}
+
+  ${({ status }) => status === TRANSACTION_STATUS.PAID
+    ? css`
+    color: #666;
+    `
+    : ''}
 `
 
-export const TransactionValue = styled.div`
+interface TransactionValueProps {
+  status: TStatus
+}
+export const TransactionValue = styled.div<TransactionValueProps>`
   font-weight: bold;
   font-size: 18px;
+
+  ${({ status }) => status === TRANSACTION_STATUS.CANCELED
+    ? css`
+    color: #c0c0c0;
+    text-decoration: line-through;
+    `
+    : ''}
+
+  ${({ status }) => status === TRANSACTION_STATUS.PAID
+    ? css`
+    color: #666;
+    `
+    : ''}
 `
 
-export const TransactionStatus = styled.div`
+interface TransactionStatusProps {
+  status: TStatus
+}
+export const TransactionStatus = styled.div<TransactionStatusProps>`
   text-align: right;
   font-size: 12px;
   color: #c0c0c0;
+
+  ${({ status }) => status === TRANSACTION_STATUS.PAID
+    ? css`
+    color: rgba(98,22,173,1);
+    font-weight: bold;
+    `
+    : ''}
 `
 
 export const TransactionUpdated = styled.div`
   font-size: 12px;
   text-align: left;
   color: #c0c0c0;
+`
+
+export const UpdateTransactionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+export const UpdateTransactionButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: space-around;
+`
+
+export const PaidButton = styled.button`
+  background: green;
+  border-radius: 8px;
+  border: 0;
+  box-shadow: 0 0 10px #fff;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 32px;
+  padding: 16px;
+  transition: all .3s;
+
+  &:hover {
+    background: #fee;
+    box-shadow: 0 0 2px #c0c0c0;
+  }
+`
+
+export const CanceledButton = styled.button`
+  background: red;
+  border-radius: 8px;
+  border: 0;
+  box-shadow: 0 0 10px #fff;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 32px;
+  padding: 16px;
+  transition: all .3s;
+
+  &:hover {
+    background: #fee;
+    box-shadow: 0 0 2px #c0c0c0;
+  }
 `

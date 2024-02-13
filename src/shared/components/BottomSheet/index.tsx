@@ -7,9 +7,10 @@ interface BottomSheetProps {
   children: React.ReactNode
   onDismiss: () => void
   title?: string
+  center?: boolean
 }
 
-export const BottomSheet: React.FC<BottomSheetProps> = ({ children, onDismiss, title = '' }): React.ReactElement => {
+export const BottomSheet: React.FC<BottomSheetProps> = ({ children, onDismiss, title = '', center = false }): React.ReactElement => {
   const backdropRef = useRef(null)
   const onClick = (ev: React.MouseEvent): void => {
     if (ev.target !== backdropRef.current) {
@@ -21,7 +22,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ children, onDismiss, t
 
   return (
     <Styled.BackDrop onClick={onClick} ref={backdropRef}>
-      <Styled.Container>
+      <Styled.Container center={center}>
         {title.length > 0 && (
           <Styled.Title>{title}</Styled.Title>
         )}

@@ -12,3 +12,9 @@ export interface TTransaction {
   currency: TCurrency
   status: TStatus
 }
+
+export enum TRANSACTION_STATUS {
+  PENDING = 'pending',
+  PAID = 'paid',
+  CANCELED = 'canceled'
+}
