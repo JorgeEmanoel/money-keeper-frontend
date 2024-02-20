@@ -8,6 +8,7 @@ export const BodyContainer = styled.div`
 
 interface BodyItemProps {
   danger?: boolean
+  active?: boolean
 }
 export const BodyItem = styled.a<BodyItemProps>`
   display: block;
@@ -30,9 +31,17 @@ export const BodyItem = styled.a<BodyItemProps>`
     border-bottom: none;
   }
 
+  ${({ active = true }) => !active
+    ? css`
+      color: #c0c0c0;
+      background: #eee;
+      cursor: default;
+    `
+    : ''}
+
   ${({ danger = false }) => danger
     ? css`
-      background: darkred;
+      background: linear-gradient(170deg, rgba(79,2,145,1) 32%, rgba(98,22,173,1) 56%, rgba(166,108,249,1) 100%);
       color: #fff;
     `
     : ''}
@@ -51,6 +60,17 @@ export const BodyItemLogout = styled.a`
 export const BodyItemIcon = styled.div`
   display: block;
   float: right;
+`
+
+export const BodyItemLabel = styled.div`
+  border-radius: 16px;
+  display: block;
+  float: right;
+  font-size: 12px;
+  color: white;
+  font-weight: normal;
+  padding: 6px 12px;
+  background: linear-gradient(170deg, rgba(79,2,145,1) 32%, rgba(98,22,173,1) 56%, rgba(166,108,249,1) 100%);
 `
 
 export const BodyList = styled.div`

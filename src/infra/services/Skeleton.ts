@@ -5,7 +5,7 @@ interface NewSkeletonBody {
   name: string
   description: string
   frequency: 'monthly' | 'anual' | 'random'
-  value: number
+  value: string
   currency: 'BRL' | 'USD'
   planId: number
   direction: 'income' | 'outcome'

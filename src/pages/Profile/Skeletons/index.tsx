@@ -10,6 +10,7 @@ import { Formik } from 'formik'
 import { Skeleton } from '../../../infra/services/Skeleton'
 import { User } from '../../../infra/services/User'
 import { type TSkeleton, type TCurrency, type TDirection, type TFrequency } from '../../../infra/shared/types/Skeletons'
+import { PlaceHolder } from '../../../shared/components/Placeholder'
 
 interface SkeletonState {
   loading: boolean
@@ -74,7 +75,7 @@ const Skeletons = (): React.ReactElement => {
               description: '',
               direction,
               frequency: 'monthly',
-              value: 0,
+              value: '',
               currency: 'BRL'
             }}
             onSubmit={async ({ name, description, direction, frequency, value, currency }) => {
@@ -83,7 +84,7 @@ const Skeletons = (): React.ReactElement => {
                 description,
                 direction: direction as TDirection,
                 frequency: frequency as TFrequency,
-                value: Number(value),
+                value,
                 currency: currency as TCurrency,
                 planId: user.currentPlanId
               })
@@ -107,18 +108,11 @@ const Skeletons = (): React.ReactElement => {
                 <Styled.Label>Description</Styled.Label>
                 <Styled.Input name="description" type="text" required maxlength="250" />
 
-                <Styled.Label>Frequency</Styled.Label>
-                <Styled.Input name="frequency" as="select" required>
-                  <option value="monthly">Monthly</option>
-                </Styled.Input>
-
                 <Styled.Label>Value</Styled.Label>
                 <Styled.Input name="value" type="text" required />
 
-                <Styled.Label>Currency</Styled.Label>
-                <Styled.Input name="currency" as="select" required>
-                  <option value="BRL">BRL</option>
-                </Styled.Input>
+                <Styled.Input name="frequency" type="hidden" value="monthly" required />
+                <Styled.Input name="currency" type="hidden" value="BRL" required />
 
                 <Styled.SubmitButton type="submit" disabled={isSubmitting}>
                   Save
@@ -186,7 +180,11 @@ const Skeletons = (): React.ReactElement => {
         </Styled.SkeletonsListTitle>
 
         <Styled.SkeletonsList>
-          {skeletonsState.items.map(item => (
+          {skeletonsState.loading && (
+            Array.from([0, 0, 0]).map(i => <PlaceHolder height='70px' margin='8px 0' key={`placeholder-${i}`} />)
+          )}
+
+          {!skeletonsState.loading && skeletonsState.items.map(item => (
             <Styled.SkeletonItem key={`skeleton-${item.id}`} onClick={() => { setExcluding(item.id) }}>
               <Styled.SkeletonColumn>
                 <Styled.SkeletonTitle>{item.name}</Styled.SkeletonTitle>

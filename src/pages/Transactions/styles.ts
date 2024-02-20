@@ -115,6 +115,7 @@ export const TransactionItem = styled.button<TransactionItemProps>`
   margin: 8px 0;
   padding: 16px;
   width: 100%;
+  position: relative;
 
   ${({ status }) => status === TRANSACTION_STATUS.CANCELED
     ? css`

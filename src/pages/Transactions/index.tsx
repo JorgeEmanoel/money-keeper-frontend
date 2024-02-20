@@ -12,6 +12,7 @@ import { Create } from './Forms/Create'
 import { FAB } from '../../shared/components/FAB'
 import { Period } from '../../infra/services/Period'
 import { Icon } from '../../shared/components/Icon'
+import { PlaceHolder } from '../../shared/components/Placeholder'
 
 interface TransactionsState {
   items: TTransaction[]
@@ -23,6 +24,7 @@ interface TransactionsState {
 interface UpdatingTransactionState {
   item: TTransaction | null
   updating: boolean
+  loading: boolean
 }
 
 const Transactions = (): React.ReactElement => {
@@ -36,6 +38,7 @@ const Transactions = (): React.ReactElement => {
   const [creating, setCreating] = useState(false)
   const [updatingTransaction, setUpdatingTransaction] = useState<UpdatingTransactionState>({
     item: null,
+    loading: false,
     updating: false
   })
 
@@ -43,6 +46,7 @@ const Transactions = (): React.ReactElement => {
     // TODO: fix type
     setUpdatingTransaction({
       item: item as TTransaction,
+      loading: false,
       updating: true
     })
   })
@@ -84,6 +88,7 @@ const Transactions = (): React.ReactElement => {
 
     setUpdatingTransaction({
       updating: false,
+      loading: false,
       item: null
     })
   }
@@ -111,6 +116,7 @@ const Transactions = (): React.ReactElement => {
         <BottomSheet title='Update transaction' center onDismiss={() => {
           setUpdatingTransaction({
             updating: false,
+            loading: false,
             item: null
           })
         }}>
@@ -125,7 +131,7 @@ const Transactions = (): React.ReactElement => {
 
                 updateStatus(updatingTransaction.item?.id, TRANSACTION_STATUS.CANCELED).catch(console.error)
               }}>
-                Canceled <Icon name='times' spin={false} />
+                Canceled <Icon name='times' spin={updatingTransaction.loading} />
               </Styled.CanceledButton>
 
               <Styled.PaidButton onClick={() => {
@@ -135,7 +141,7 @@ const Transactions = (): React.ReactElement => {
 
                 updateStatus(updatingTransaction.item?.id, TRANSACTION_STATUS.PAID).catch(console.error)
               }}>
-                Paid <Icon name='check' spin={false} />
+                Paid <Icon name='check' spin={updatingTransaction.loading} />
               </Styled.PaidButton>
             </Styled.UpdateTransactionButtonContainer>
           </Styled.UpdateTransactionContainer>
@@ -158,16 +164,32 @@ const Transactions = (): React.ReactElement => {
         <Styled.ResumeContainer>
           <Styled.ResumeItem>
             <Styled.ResumeLabel>
-              Total
+              Paid
             </Styled.ResumeLabel>
             <Styled.ResumeValue>
-              {transactionsState.total.toLocaleString()} BRL
+              {transactionsState.loading && (
+                <PlaceHolder height='30px' margin='2px 0'/>
+              )}
+
+              {!transactionsState.loading && (
+                <>
+                  {transactionsState.total.toLocaleString()} BRL
+                </>
+              )}
             </Styled.ResumeValue>
           </Styled.ResumeItem>
           <Styled.ResumeItem>
             <Styled.ResumeLabel>Pending</Styled.ResumeLabel>
             <Styled.ResumeValue>
-              {transactionsState.totalPending.toLocaleString()} BRL
+              {transactionsState.loading && (
+                <PlaceHolder height='30px' margin='2px 0'/>
+              )}
+
+              {!transactionsState.loading && (
+                <>
+                  {transactionsState.totalPending.toLocaleString()} BRL
+                </>
+              )}
             </Styled.ResumeValue>
           </Styled.ResumeItem>
         </Styled.ResumeContainer>
@@ -177,11 +199,21 @@ const Transactions = (): React.ReactElement => {
         </Styled.TransactionsListTitle>
 
         <Styled.TransactionsList>
-          {transactionsState.items.map(item => (
+          {transactionsState.loading && Array.from([0, 1, 2]).map(t => (
+            <PlaceHolder height='70px' margin='8px 0' key={`transaciton-placeholder-${t}`}/>
+          ))}
+          {!transactionsState.loading && transactionsState.items.map(item => (
             <Styled.TransactionItem
               status={item.status}
               id={`transaction-${item.id}`}
               key={`transactions-${item.id}`}
+              onClick={() => {
+                setUpdatingTransaction({
+                  item,
+                  loading: false,
+                  updating: true
+                })
+              }}
               {...bindTransactionLongPress(item)}
             >
               <Styled.TransactionColumn>

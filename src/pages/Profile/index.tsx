@@ -33,17 +33,14 @@ const Profile = (): React.ReactElement => {
               <Icon name="dollar" />
             </Styled.BodyItemIcon>
           </Styled.BodyItem>
-          <Styled.BodyItem href="#" onClick={() => { navigate('/profile/skeletons') }}>
+          <Styled.BodyItem active={false} href="#" onClick={() => { navigate('/profile/skeletons') }}>
             Plans
+            <Styled.BodyItemLabel>Soon</Styled.BodyItemLabel>
           </Styled.BodyItem>
-          <Styled.BodyItem href="#" onClick={() => { navigate('/profile/skeletons') }}>
-            Saving Plans
-          </Styled.BodyItem>
-          <Styled.BodyItem href="#" onClick={() => { navigate('/profile/skeletons') }}>
+          <Styled.BodyItem active={false} href="#" onClick={() => { navigate('/profile/skeletons') }}>
             Settings
-            <Styled.BodyItemIcon>
-              <Icon name="gear" />
-            </Styled.BodyItemIcon>
+
+            <Styled.BodyItemLabel>Soon</Styled.BodyItemLabel>
           </Styled.BodyItem>
           <Styled.BodyItem danger={true} href="#" onClick={logout}>
             Logout
