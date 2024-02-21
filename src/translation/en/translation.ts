@@ -21,6 +21,10 @@ export default {
   skeletons: {
     title: 'Skeletons',
     mine: 'My skeletons',
+    new: {
+      incoming: 'New incoming',
+      outcoming: 'New outcoming'
+    },
     deleteQuestion: 'Area you sure you want to delete?',
     failedToDelete: 'Failed to delete skeleton',
     failedtoCreate: 'Failed to create the skeleton. Please, try again later'

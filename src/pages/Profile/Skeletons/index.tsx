@@ -72,7 +72,7 @@ const Skeletons = (): React.ReactElement => {
   return (
     <Styled.MainContainer>
       {creating && (
-        <BottomSheet onDismiss={() => { setCreating(false) }}>
+        <BottomSheet title={t('skeletons.newTitle')} onDismiss={() => { setCreating(false) }}>
           <Formik
             initialValues={{
               name: '',
