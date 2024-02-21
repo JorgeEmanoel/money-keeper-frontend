@@ -7,6 +7,8 @@ import { Period } from '../../../../infra/services/Period'
 import { Icon } from '../../../../shared/components/Icon'
 
 import * as Styled from './styles'
+import { useTranslation } from 'react-i18next'
+import { Locale } from '../../../../infra/services/Locale'
 
 interface CreateProps {
   afterCreate: () => void
@@ -14,6 +16,8 @@ interface CreateProps {
 }
 
 export const Create: React.FC<CreateProps> = ({ afterCreate, direction }) => {
+  const { t } = useTranslation()
+
   return (
     <Formik
       initialValues={{
@@ -21,7 +25,7 @@ export const Create: React.FC<CreateProps> = ({ afterCreate, direction }) => {
         description: '',
         frequency: 'monthly',
         value: 0,
-        currency: 'BRL'
+        currency: Locale.currency()
       }}
       onSubmit={async ({ name, description, value }) => {
         const period = Period.current()
@@ -31,7 +35,7 @@ export const Create: React.FC<CreateProps> = ({ afterCreate, direction }) => {
           direction,
           period: period.filterFormat,
           value: Number(value),
-          currency: 'BRL'
+          currency: Locale.currency()
         })
 
         if (response.ok) {
@@ -39,7 +43,7 @@ export const Create: React.FC<CreateProps> = ({ afterCreate, direction }) => {
           return
         }
 
-        alert('Failed to create the transaction. Please try again later')
+        alert(t('transactions.faledToCreate'))
         console.error('Failed to create transaction')
       }}
     >
@@ -47,17 +51,17 @@ export const Create: React.FC<CreateProps> = ({ afterCreate, direction }) => {
         isSubmitting
       }) => (
         <Styled.FormContainer>
-          <Styled.Label>Name</Styled.Label>
+          <Styled.Label>{t('fields.name')}</Styled.Label>
           <Styled.Input name="name" type="text" required maxlength="40" />
 
-          <Styled.Label>Description</Styled.Label>
+          <Styled.Label>{t('fields.description')}</Styled.Label>
           <Styled.Input name="description" type="text" required maxlength="250" />
 
-          <Styled.Label>Value</Styled.Label>
+          <Styled.Label>{t('fields.value')}</Styled.Label>
           <Styled.Input name="value" type="text" required />
 
           <Styled.SubmitButton type="submit" disabled={isSubmitting}>
-            Save
+            {t('general.button.save')}
             {isSubmitting && <Icon name="spinner" spin />}
           </Styled.SubmitButton>
         </Styled.FormContainer>

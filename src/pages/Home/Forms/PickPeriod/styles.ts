@@ -14,6 +14,7 @@ export const Row = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  gap: 18px;
 `
 
 export const FormGroup = styled.div`
@@ -35,7 +36,7 @@ export const Input = styled(Field)`
 export const SaveButton = styled.button`
   background: linear-gradient(170deg, rgba(79,2,145,1) 32%, rgba(98,22,173,1) 56%, rgba(166,108,249,1) 100%);
   color: white;
-  font-size: 24px;
+  font-size: 16px;
   border-radius: 8px;
   border: none;
   padding: 16px 20px;

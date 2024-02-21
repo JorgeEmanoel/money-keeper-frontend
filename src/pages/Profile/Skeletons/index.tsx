@@ -11,6 +11,9 @@ import { Skeleton } from '../../../infra/services/Skeleton'
 import { User } from '../../../infra/services/User'
 import { type TSkeleton, type TCurrency, type TDirection, type TFrequency } from '../../../infra/shared/types/Skeletons'
 import { PlaceHolder } from '../../../shared/components/Placeholder'
+import { Money } from '../../../shared/utils/Money'
+import { useTranslation } from 'react-i18next'
+import { Locale } from '../../../infra/services/Locale'
 
 interface SkeletonState {
   loading: boolean
@@ -19,6 +22,7 @@ interface SkeletonState {
 }
 
 const Skeletons = (): React.ReactElement => {
+  const { t } = useTranslation()
   const [direction, setDirection] = useState<TDirection>('outcome')
   const [creating, setCreating] = useState(false)
   const [skeletonsState, setSkeletonsState] = useState<SkeletonState>({
@@ -54,7 +58,7 @@ const Skeletons = (): React.ReactElement => {
     const result = await Skeleton.exclude(user.currentPlanId, excluding)
 
     if (!result.ok) {
-      alert('Failed to delete exclude')
+      alert(t('skeletons.failedToDelete'))
     }
 
     setExcluding(0)
@@ -76,7 +80,7 @@ const Skeletons = (): React.ReactElement => {
               direction,
               frequency: 'monthly',
               value: '',
-              currency: 'BRL'
+              currency: Locale.currency()
             }}
             onSubmit={async ({ name, description, direction, frequency, value, currency }) => {
               const response = await Skeleton.create({
@@ -94,7 +98,7 @@ const Skeletons = (): React.ReactElement => {
                 return
               }
 
-              alert('Failed to create the skeleton. Please try again later')
+              alert(t('skeletons.failedToCreate'))
               console.error('Failed to create skeleton')
             }}
           >
@@ -102,20 +106,20 @@ const Skeletons = (): React.ReactElement => {
               isSubmitting
             }) => (
               <Styled.FormContainer>
-                <Styled.Label>Name</Styled.Label>
+                <Styled.Label>{t('fields.name')}</Styled.Label>
                 <Styled.Input name="name" type="text" required maxlength="40" />
 
-                <Styled.Label>Description</Styled.Label>
+                <Styled.Label>{t('fields.description')}</Styled.Label>
                 <Styled.Input name="description" type="text" required maxlength="250" />
 
-                <Styled.Label>Value</Styled.Label>
+                <Styled.Label>{t('fields.value')}</Styled.Label>
                 <Styled.Input name="value" type="text" required />
 
                 <Styled.Input name="frequency" type="hidden" value="monthly" required />
                 <Styled.Input name="currency" type="hidden" value="BRL" required />
 
                 <Styled.SubmitButton type="submit" disabled={isSubmitting}>
-                  Save
+                  {t('general.button.save')}
                   {isSubmitting && <Icon name="spinner" spin />}
                 </Styled.SubmitButton>
               </Styled.FormContainer>
@@ -126,20 +130,20 @@ const Skeletons = (): React.ReactElement => {
 
       {excluding !== 0 && (
         <BottomSheet onDismiss={() => { setExcluding(0) }}>
-          Delete?
+          {t('skeletons.deleteQuestion')}?
 
           <br />
 
           <Styled.DeleteContainer>
             <Styled.ButtonContainer>
               <Styled.CancelButton onClick={() => { setExcluding(0) }}>
-                Cancel
+                {t('general.button.cancel')}
               </Styled.CancelButton>
             </Styled.ButtonContainer>
 
             <Styled.ButtonContainer>
               <Styled.DeleteButton onClick={() => { exclude().catch(console.error) }}>
-                Yes, delete <Icon name="trash" />
+                {t('general.button.delete')} <Icon name="trash" />
               </Styled.DeleteButton>
             </Styled.ButtonContainer>
           </Styled.DeleteContainer>
@@ -151,14 +155,14 @@ const Skeletons = (): React.ReactElement => {
         <Icon name="plus" />
       </Styled.AddButton>
 
-      <Styled.Title>Skeletons</Styled.Title>
+      <Styled.Title>{t('skeletons.title')}</Styled.Title>
       <Styled.FilterContainer>
         <Styled.DirectionContainer>
           <Styled.DirectionItem onClick={() => { setDirection('income') }} type="button" side="left" active={direction === 'income'}>
-            Incomes
+            {t('general.domain.incomings')}
           </Styled.DirectionItem>
           <Styled.DirectionItem onClick={() => { setDirection('outcome') }} type="button" side="right" active={direction === 'outcome'}>
-            Outcomes
+            {t('general.domain.outcomings')}
           </Styled.DirectionItem>
         </Styled.DirectionContainer>
       </Styled.FilterContainer>
@@ -170,13 +174,13 @@ const Skeletons = (): React.ReactElement => {
               Total
             </Styled.ResumeLabel>
             <Styled.ResumeValue>
-              {skeletonsState.total} BRL
+              {Money.toLocale(skeletonsState.total)}
             </Styled.ResumeValue>
           </Styled.ResumeItem>
         </Styled.ResumeContainer>
 
         <Styled.SkeletonsListTitle>
-          My skeletons
+          {t('skeletons.mine')}
         </Styled.SkeletonsListTitle>
 
         <Styled.SkeletonsList>
@@ -192,8 +196,10 @@ const Skeletons = (): React.ReactElement => {
               </Styled.SkeletonColumn>
 
               <Styled.SkeletonColumn>
-                <Styled.SkeletonValue>{item.value} {item.currency}</Styled.SkeletonValue>
-                <Styled.SkeletonFrequency>{item.frequency}</Styled.SkeletonFrequency>
+                <Styled.SkeletonValue>{Money.toLocale(item.value)}</Styled.SkeletonValue>
+                <Styled.SkeletonFrequency>
+                  {t(`general.domain.frequency.${item.frequency}`)}
+                </Styled.SkeletonFrequency>
               </Styled.SkeletonColumn>
             </Styled.SkeletonItem>))
           }

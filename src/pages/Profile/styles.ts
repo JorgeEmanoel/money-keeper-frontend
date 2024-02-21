@@ -78,3 +78,51 @@ export const BodyList = styled.div`
   box-shadow: 0 0 16px #333;
   margin-top: -100px;
 `
+
+export const UpdateLanguageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+export const UpdateLanguageButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: space-around;
+`
+
+export const PTBRButton = styled.button`
+  background: linear-gradient(170deg, rgba(79,2,145,1) 32%, rgba(98,22,173,1) 56%, rgba(166,108,249,1) 100%);
+  border-radius: 8px;
+  border: 0;
+  box-shadow: 0 0 10px #fff;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 32px;
+  padding: 16px;
+  transition: all .3s;
+
+  &:hover {
+    background: #fee;
+    box-shadow: 0 0 2px #c0c0c0;
+  }
+`
+
+export const ENButton = styled.button`
+  background: linear-gradient(170deg, rgba(79,2,145,1) 32%, rgba(98,22,173,1) 56%, rgba(166,108,249,1) 100%);
+  border-radius: 8px;
+  border: 0;
+  box-shadow: 0 0 10px #fff;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 32px;
+  padding: 16px;
+  transition: all .3s;
+
+  &:hover {
+    background: #fee;
+    box-shadow: 0 0 2px #c0c0c0;
+  }
+`

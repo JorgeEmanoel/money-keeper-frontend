@@ -13,6 +13,8 @@ import { FAB } from '../../shared/components/FAB'
 import { Period } from '../../infra/services/Period'
 import { Icon } from '../../shared/components/Icon'
 import { PlaceHolder } from '../../shared/components/Placeholder'
+import { Money } from '../../shared/utils/Money'
+import { useTranslation } from 'react-i18next'
 
 interface TransactionsState {
   items: TTransaction[]
@@ -28,6 +30,7 @@ interface UpdatingTransactionState {
 }
 
 const Transactions = (): React.ReactElement => {
+  const { t } = useTranslation()
   const [direction, setDirection] = useState<TDirection>('income')
   const [transactionsState, setTransactionsState] = useState<TransactionsState>({
     items: [],
@@ -82,7 +85,7 @@ const Transactions = (): React.ReactElement => {
     const response = await Transaction.changeStatus(id, status)
 
     if (!response.ok) {
-      alert('Failed to update transaction status')
+      alert(t('transactions.failedToUpdateStatus'))
       return
     }
 
@@ -104,7 +107,7 @@ const Transactions = (): React.ReactElement => {
       <FAB iconName='plus' onClick={() => { setCreating(true) }} spinner={false} />
 
       {creating && (
-        <BottomSheet onDismiss={() => { setCreating(false) }} title={`Create a new ODD ${direction}`}>
+        <BottomSheet onDismiss={() => { setCreating(false) }} title={t('transactions.create.title')}>
           <Create direction={direction} afterCreate={() => {
             setCreating(false)
             fetchTransactions().catch(console.error)
@@ -113,7 +116,7 @@ const Transactions = (): React.ReactElement => {
       )}
 
       {updatingTransaction.updating && (
-        <BottomSheet title='Update transaction' center onDismiss={() => {
+        <BottomSheet title={t('transactions.status.secondaryTitle')} center onDismiss={() => {
           setUpdatingTransaction({
             updating: false,
             loading: false,
@@ -121,8 +124,7 @@ const Transactions = (): React.ReactElement => {
           })
         }}>
           <Styled.UpdateTransactionContainer>
-            <p>Please, select the new transaction status:</p>
-
+            <p>{t('transactions.status.mainTitle')}</p>
             <Styled.UpdateTransactionButtonContainer>
               <Styled.CanceledButton onClick={() => {
                 if (updatingTransaction.item === null) {
@@ -131,7 +133,7 @@ const Transactions = (): React.ReactElement => {
 
                 updateStatus(updatingTransaction.item?.id, TRANSACTION_STATUS.CANCELED).catch(console.error)
               }}>
-                Canceled <Icon name='times' spin={updatingTransaction.loading} />
+                {t('general.domain.transaction.canceled')} <Icon name='times' spin={updatingTransaction.loading} />
               </Styled.CanceledButton>
 
               <Styled.PaidButton onClick={() => {
@@ -141,21 +143,21 @@ const Transactions = (): React.ReactElement => {
 
                 updateStatus(updatingTransaction.item?.id, TRANSACTION_STATUS.PAID).catch(console.error)
               }}>
-                Paid <Icon name='check' spin={updatingTransaction.loading} />
+                {t('general.domain.transaction.paid')} <Icon name='check' spin={updatingTransaction.loading} />
               </Styled.PaidButton>
             </Styled.UpdateTransactionButtonContainer>
           </Styled.UpdateTransactionContainer>
         </BottomSheet>
       )}
 
-      <Styled.Title>Transactions</Styled.Title>
+      <Styled.Title>{t('transactions.title')}</Styled.Title>
       <Styled.FilterContainer>
         <Styled.DirectionContainer>
           <Styled.DirectionItem onClick={() => { setDirection('income') }} type="button" side="left" active={direction === 'income'}>
-            Incomes
+            {t('general.domain.incomings')}
           </Styled.DirectionItem>
           <Styled.DirectionItem onClick={() => { setDirection('outcome') }} type="button" side="right" active={direction === 'outcome'}>
-            Outcomes
+            {t('general.domain.outcomings')}
           </Styled.DirectionItem>
         </Styled.DirectionContainer>
       </Styled.FilterContainer>
@@ -164,7 +166,7 @@ const Transactions = (): React.ReactElement => {
         <Styled.ResumeContainer>
           <Styled.ResumeItem>
             <Styled.ResumeLabel>
-              Paid
+              {t('general.domain.transaction.paid')}
             </Styled.ResumeLabel>
             <Styled.ResumeValue>
               {transactionsState.loading && (
@@ -173,13 +175,15 @@ const Transactions = (): React.ReactElement => {
 
               {!transactionsState.loading && (
                 <>
-                  {transactionsState.total.toLocaleString()} BRL
+                  {Money.toLocale(transactionsState.total)}
                 </>
               )}
             </Styled.ResumeValue>
           </Styled.ResumeItem>
           <Styled.ResumeItem>
-            <Styled.ResumeLabel>Pending</Styled.ResumeLabel>
+            <Styled.ResumeLabel>
+              {t('general.domain.transaction.pending')}
+            </Styled.ResumeLabel>
             <Styled.ResumeValue>
               {transactionsState.loading && (
                 <PlaceHolder height='30px' margin='2px 0'/>
@@ -187,7 +191,7 @@ const Transactions = (): React.ReactElement => {
 
               {!transactionsState.loading && (
                 <>
-                  {transactionsState.totalPending.toLocaleString()} BRL
+                  {Money.toLocale(transactionsState.totalPending)}
                 </>
               )}
             </Styled.ResumeValue>
@@ -195,7 +199,7 @@ const Transactions = (): React.ReactElement => {
         </Styled.ResumeContainer>
 
         <Styled.TransactionsListTitle>
-          Last transactions
+          {t('transactions.last')}
         </Styled.TransactionsListTitle>
 
         <Styled.TransactionsList>
@@ -222,8 +226,10 @@ const Transactions = (): React.ReactElement => {
               </Styled.TransactionColumn>
 
               <Styled.TransactionColumn>
-                <Styled.TransactionValue status={item.status}>{item.value.toLocaleString()} BRL</Styled.TransactionValue>
-                <Styled.TransactionStatus status={item.status}>{item.status.toUpperCase()}</Styled.TransactionStatus>
+                <Styled.TransactionValue status={item.status}>{Money.toLocale(item.value)}</Styled.TransactionValue>
+                <Styled.TransactionStatus status={item.status}>
+                  {t(`general.domain.transaction.${item.status}`).toUpperCase()}
+                </Styled.TransactionStatus>
               </Styled.TransactionColumn>
             </Styled.TransactionItem>
           ))}

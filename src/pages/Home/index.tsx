@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BottomNavigation } from '../../shared/components/BottomNavigation'
 import { AuthPage } from '../../shared/middleware/AuthPage'
@@ -15,6 +16,7 @@ import { FAB } from '../../shared/components/FAB'
 import { Period } from '../../infra/services/Period'
 import { BottomSheet } from '../../shared/components/BottomSheet'
 import { PickPeriod } from './Forms/PickPeriod'
+import { Money } from '../../shared/utils/Money'
 
 interface SummaryProps {
   totalIncomings: number
@@ -30,6 +32,7 @@ interface TransactionsState {
 }
 
 const Home = (): React.ReactElement => {
+  const { t } = useTranslation()
   const [transactionsState, setTransactionsState] = useState<TransactionsState>({
     loading: true,
     items: []
@@ -99,7 +102,7 @@ const Home = (): React.ReactElement => {
     <Styled.MainContainer>
       <BottomNavigation current="home" />
       {pickingPeriod && (
-        <BottomSheet onDismiss={() => { setPickingPeriod(false) } } title='Pick a new period' center={true}>
+        <BottomSheet onDismiss={() => { setPickingPeriod(false) } } title={t('home.period.pick')} center={true}>
           <PickPeriod
             defaultMonth={Period.month()}
             defaultYear={Period.year()}
@@ -117,7 +120,13 @@ const Home = (): React.ReactElement => {
           disabled={loadingInit}
           spinner={loadingInit}
           iconName="play"
-          onClick={() => { handleInit().catch(console.error) }}
+          onClick={() => {
+            if (!confirm('Are you sure you want to generate the transcations?')) {
+              return
+            }
+
+            handleInit().catch(console.error)
+          }}
         />
       )}
 
@@ -135,12 +144,12 @@ const Home = (): React.ReactElement => {
 
           <Styled.CardRow>
             <Styled.CardColumn>
-              <Styled.CardLabel>Balance</Styled.CardLabel>
+              <Styled.CardLabel>{t('general.domain.balance')}</Styled.CardLabel>
               <Styled.CardValue>
                 {loadingSummary && <Icon name="spinner" spin />}
                 {!loadingSummary && (
                   <>
-                    {summary.balance.toLocaleString()} BRL
+                    {Money.toLocale(summary.balance)}
                   </>
                 )}
               </Styled.CardValue>
@@ -149,24 +158,24 @@ const Home = (): React.ReactElement => {
 
           <Styled.CardRow>
             <Styled.CardColumn>
-              <Styled.CardLabel>Income</Styled.CardLabel>
+              <Styled.CardLabel>{t('general.domain.income')}</Styled.CardLabel>
               <Styled.CardValue>
                 {loadingSummary && <Icon name="spinner" spin />}
                 {!loadingSummary && (
                   <>
-                    {summary.totalIncomings.toLocaleString()} BRL
+                    {Money.toLocale(summary.totalIncomings)}
                   </>
                 )}
               </Styled.CardValue>
             </Styled.CardColumn>
 
             <Styled.CardColumn>
-              <Styled.CardLabel>Outcome</Styled.CardLabel>
+              <Styled.CardLabel>{t('general.domain.outcome')}</Styled.CardLabel>
               <Styled.CardValue>
                 {loadingSummary && <Icon name="spinner" spin />}
                 {!loadingSummary && (
                   <>
-                    {summary.totalOutcomings.toLocaleString()} BRL
+                    {Money.toLocale(summary.totalOutcomings)}
                   </>
                 )}
               </Styled.CardValue>
@@ -178,7 +187,7 @@ const Home = (): React.ReactElement => {
           {transactionsState.items.map(t => (
             <Styled.BodyListElement key={`transaction-${t.id}`}>
               <Styled.BodyListElementName>{t.name}</Styled.BodyListElementName>
-              <Styled.BodyListElementValue>{t.value.toLocaleString()} BRL</Styled.BodyListElementValue>
+              <Styled.BodyListElementValue>{Money.toLocale(t.value)}</Styled.BodyListElementValue>
             </Styled.BodyListElement>
           ))}
         </Styled.BodyList>

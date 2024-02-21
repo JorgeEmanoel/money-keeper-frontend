@@ -3,9 +3,12 @@ import React from 'react'
 import ProfilePicture from '../../../assets/images/img_generic-user.jpg'
 import * as Styled from './styles'
 import { User } from '../../../infra/services/User'
+import { useTranslation } from 'react-i18next'
 
 export const ProfileHeader = (): React.ReactElement => {
   const user = User.me()
+  const { t } = useTranslation()
+
   return (
     <Styled.TopContainer>
       <Styled.ProfileContainer>
@@ -16,10 +19,10 @@ export const ProfileHeader = (): React.ReactElement => {
 
           <Styled.ProfileColumn>
             <Styled.ProfileWelcomeMessage>
-                Welcome back,
+              {t('home.welcome')}
             </Styled.ProfileWelcomeMessage>
             <Styled.ProfileName>
-                Mr {user.name}
+              {user.name}
             </Styled.ProfileName>
           </Styled.ProfileColumn>
         </Styled.ProfileRow>

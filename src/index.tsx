@@ -8,6 +8,8 @@ import {
   RouterProvider
 } from 'react-router-dom'
 
+import './translation/config'
+
 import { ToastContainer } from 'react-toastify'
 
 // Styles

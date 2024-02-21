@@ -3,6 +3,7 @@ import { Formik } from 'formik'
 
 import * as Styled from './styles'
 import { Icon } from '../../../../shared/components/Icon'
+import { useTranslation } from 'react-i18next'
 
 interface PickPeriodProps {
   defaultMonth: number
@@ -11,6 +12,8 @@ interface PickPeriodProps {
 }
 
 const PickPeriod: React.FC<PickPeriodProps> = ({ defaultMonth, defaultYear, onPick }) => {
+  const { t } = useTranslation()
+
   return (
     <Formik
       initialValues={{
@@ -25,12 +28,12 @@ const PickPeriod: React.FC<PickPeriodProps> = ({ defaultMonth, defaultYear, onPi
         <Styled.FormContainer onSubmit={handleSubmit}>
           <Styled.Row>
             <Styled.FormGroup>
-              <Styled.Label>Month</Styled.Label>
+              <Styled.Label>{t('general.fields.month')}</Styled.Label>
               <Styled.Input name="month" type="number" min="1" max="12" />
             </Styled.FormGroup>
 
             <Styled.FormGroup>
-              <Styled.Label>Year</Styled.Label>
+              <Styled.Label>{t('general.fields.year')}</Styled.Label>
               <Styled.Input name="year" type="number" />
             </Styled.FormGroup>
           </Styled.Row>
@@ -38,7 +41,7 @@ const PickPeriod: React.FC<PickPeriodProps> = ({ defaultMonth, defaultYear, onPi
           <Styled.Row>
             <Styled.FormGroup>
               <Styled.SaveButton type='submit'>
-                Save <Icon name={isSubmitting ? 'spinner' : 'save'} spin={isSubmitting} />
+                {t('general.button.select')} <Icon name={isSubmitting ? 'spinner' : 'check'} spin={isSubmitting} />
               </Styled.SaveButton>
             </Styled.FormGroup>
           </Styled.Row>
