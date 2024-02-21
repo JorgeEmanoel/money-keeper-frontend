@@ -106,13 +106,13 @@ const Skeletons = (): React.ReactElement => {
               isSubmitting
             }) => (
               <Styled.FormContainer>
-                <Styled.Label>{t('fields.name')}</Styled.Label>
+                <Styled.Label>{t('general.fields.name')}</Styled.Label>
                 <Styled.Input name="name" type="text" required maxlength="40" />
 
-                <Styled.Label>{t('fields.description')}</Styled.Label>
+                <Styled.Label>{t('general.fields.description')}</Styled.Label>
                 <Styled.Input name="description" type="text" required maxlength="250" />
 
-                <Styled.Label>{t('fields.value')}</Styled.Label>
+                <Styled.Label>{t('general.fields.value')}</Styled.Label>
                 <Styled.Input name="value" type="text" required />
 
                 <Styled.Input name="frequency" type="hidden" value="monthly" required />
