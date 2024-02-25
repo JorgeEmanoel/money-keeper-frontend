@@ -17,7 +17,6 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import { ROUTES } from './routes'
 
-// TODO: separate
 const router = createBrowserRouter(ROUTES)
 
 const root = ReactDOM.createRoot(
@@ -30,9 +29,8 @@ root.render(
   </React.StrictMode>
 )
 
-// TODO: enable service worker
 // Learn more about service workers: https://cra.link/PWA
-serviceWorkerRegistration.unregister()
+serviceWorkerRegistration.register()
 
 // TODO: monitoring
 reportWebVitals()
