@@ -38,6 +38,7 @@ export const WelcomeMessage = styled.p`
 
 export const FormContainer = styled(Form)`
   display: flex;
+  width: 80vw;
   flex-direction: column;
 `
 
@@ -66,7 +67,7 @@ export const SubmitButton = styled.button`
   cursor: pointer;
   font-weight: bold;
   margin-top: 32px;
-  padding: 8px 16px;
+  padding: 16px 16px;
   transition: all .3s;
 
   &:hover {

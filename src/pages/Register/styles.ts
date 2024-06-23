@@ -39,6 +39,7 @@ export const FormContainer = styled(Form)`
   display: flex;
   flex-direction: column;
   position: relative;
+  width: 80vw;
 `
 
 export const Label = styled.label`
@@ -54,7 +55,7 @@ export const Input = styled(Field)`
   border: 0;
   box-shadow: 0 0 8px #fff;
   color: #333;
-  padding: 8px 16px;
+  padding: 16px 16px;
 `
 
 export const SubmitButton = styled.button`
